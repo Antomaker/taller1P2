@@ -454,7 +454,7 @@ Antes de entregar, verifica cada punto:
 
 ---
 
-**Fecha límite de entrega:** Próxima clase
+**Fecha límite de entrega:** Despues de semana santa nota pasada la tutoria colectiva 
 **Modalidad:** grupos de proyecto de aula
 
 ---
