@@ -8,6 +8,7 @@ package com.mycompany.sistemabancariodemo.modelo.interfacee;
  *
  * @author Dell
  */
+//j
 //1.INTERFACE-CONSULTABLE
 public interface Consultable {
     

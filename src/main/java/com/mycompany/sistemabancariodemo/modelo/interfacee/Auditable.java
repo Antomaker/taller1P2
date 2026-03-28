@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
  *
  * @author Dell
  */
+//j
 public interface Auditable {
     
     public LocalDateTime obetenerFechaDeCreacion();
