@@ -8,6 +8,6 @@ package modelo.excepciones;
  *
  * @author maygu
  */
-public class SistemaBancarioException {
+public class SistemaBancarioException extends Exception {
     
 }

@@ -8,6 +8,6 @@ package modelo.excepciones;
  *
  * @author maygu
  */
-public class BancoRuntimeException {
+public class BancoRuntimeException extends RuntimeException {
     
 }

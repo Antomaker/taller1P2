@@ -4,10 +4,12 @@
  */
 package modelo.cuentas;
 
+import modelo.abstractas.Cuenta;
+
 /**
  *
  * @author maygu
  */
-public class CuentaCredito {
+public class CuentaCredito extends Cuenta{
     
 }
