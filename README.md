@@ -55,7 +55,19 @@ A continuación se listan **todas** las historias de usuario del sistema. Cada h
 
 | ID | Historia | Criterios de Aceptación | Prioridad | Story Points |
 |:---|:---|:---|:---:|:---:|
-| **HU-01** | Como **cajero**, quiero registrar un cliente natural con sus datos personales para aperturar una cuenta en el sistema | - El sistema valida que el documento de identidad no esté repetido. El sistema lanza `CapacidadExcedidaException` si el banco alcanzó su límite de clientes. Los datos nulos o vacíos lanzan 
+| **HU-01** | Como **cajero**, quiero registrar un cliente natural con sus datos personales para aperturar una cuenta en el sistema | - El sistema valida que el documento de identidad no esté repetido. El sistema lanza `CapacidadExcedidaException` si el banco alcanzó su límite de clientes. Los datos nulos o vacíos lanzan error. El cliente queda registrado correctamente en el sistema | Alta | 5 |
+| **HU-02** | Como **cajero**, quiero abrir una cuenta bancaria para un cliente registrado para que pueda realizar transacciones | - El sistema valida que el cliente exista en el sistema. El número maximo de cuentas por cliente son 5. El sistema valida el tipo de cuenta. El sistema lanza `CapacidadExcedidaException` si el banco excede la capacidad de cuentas | Alta | 5 | 
+| **HU-03** | Como **cajero**, quiero realizar depósitos para aumentar el saldo de una cuenta en el sistema | - El sistema valida que el valor a depositar sea positivo. El sistema valida que la cuenta no esté bloqueada. El sistema lanza `CuentaBloqueadaException` si la cuenta está bloqueada. La transacción queda registrada correctamente en el sistema | Alta | 4 |
+| **HU-04** | Como **cajero**, quiero realizar retiros para que el cliente pueda usar su dinero | - El sistema valida que el saldo de la cuenta es suficiente. El sistema valida que la cuenta no esté bloqueada. El sistema lanza `CuentaBloqueadaException` si la cuenta está bloqueada. La transacción queda registrada correctamente en el sistema | Alta | 5 |
+| **HU-05** | Como **asesor financiero**, quiero realizar transferencias entre cuentas para mover dinero entre clientes | - El sistema valida el saldo de las cuentas. El sistema valida que ambas cuentas se encuentren activas. La transacción queda registrada correctamente en el sistema | Alta | 5 |
+| **HU-06** | Como **asesor financiero**, quiero consultar información de clientes para brindar asesoría | - El sistema valida que el cliente exista en el sistema. El sistema lanza `ClienteNoEncontradoException` si el cliente no existe | Media | 3 |
+| **HU-07** | Como **asesor financiero**, quiero bloquear y desbloquear cuentas para seguridad del banco | 
+| **HU-08** | Como **gerente de sucursal**, quiero aprobar créditos para autorizar prestamos | 
+| **HU-09** | Como **gerente de sucursal**, quiero registrar empleados para gestionar el personal | 
+| **HU-10** | Como **gerente de sucursal**, quiero calcular la nómina para pagar salarios |
+| **HU-11** | Como **cliente**, quiero recibir notificaciones para estar informado de mis transacciones |
+| **HU-12** | Como **sistema auditor**, quiero consultar historial de transacciones para verificar cambio | 
+
 
 ---
 
