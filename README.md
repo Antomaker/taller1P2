@@ -61,13 +61,12 @@ A continuación se listan **todas** las historias de usuario del sistema. Cada h
 | **HU-04** | Como **cajero**, quiero realizar retiros para que el cliente pueda usar su dinero | - El sistema valida que el saldo de la cuenta es suficiente. El sistema valida que la cuenta no esté bloqueada. El sistema lanza `CuentaBloqueadaException` si la cuenta está bloqueada. La transacción queda registrada correctamente en el sistema | Alta | 5 |
 | **HU-05** | Como **asesor financiero**, quiero realizar transferencias entre cuentas para mover dinero entre clientes | - El sistema valida el saldo de las cuentas. El sistema valida que ambas cuentas se encuentren activas. La transacción queda registrada correctamente en el sistema | Alta | 5 |
 | **HU-06** | Como **asesor financiero**, quiero consultar información de clientes para brindar asesoría | - El sistema valida que el cliente exista en el sistema. El sistema lanza `ClienteNoEncontradoException` si el cliente no existe | Media | 3 |
-| **HU-07** | Como **asesor financiero**, quiero bloquear y desbloquear cuentas para seguridad del banco | 
-| **HU-08** | Como **gerente de sucursal**, quiero aprobar créditos para autorizar prestamos | 
-| **HU-09** | Como **gerente de sucursal**, quiero registrar empleados para gestionar el personal | 
-| **HU-10** | Como **gerente de sucursal**, quiero calcular la nómina para pagar salarios |
-| **HU-11** | Como **cliente**, quiero recibir notificaciones para estar informado de mis transacciones |
-| **HU-12** | Como **sistema auditor**, quiero consultar historial de transacciones para verificar cambio | 
-
+| **HU-07** | Como **asesor financiero**, quiero bloquear y desbloquear cuentas segun criterios de seguridad del banco | El sistema valida las cuentas. El estado de la cuenta se actualiza correctamente | Media | 3 |
+| **HU-08** | Como **gerente de sucursal**, quiero aprobar créditos para autorizar prestamos a clientes | -El sistema valida que solo el gerente pueda realiar la funcion. El sistema lanza `PermisoInsuficienteException` si otro empleado llama a la funcion. EL sistema evalua las condiciones del cliente. El estado del credito cambia a aprobado | Alta | 5 |
+| **HU-09** | Como **gerente de sucursal**, quiero registrar empleados para gestionar el personal del banco | El sistema valida los datos. El sistema no permite datos duplicados. | Media | 3 |
+| **HU-10** | Como **gerente de sucursal**, quiero calcular la nómina para pagar salarios de los empleados del banco | El sistema debe incluir las bonificaciones según metas o especialidad ded cada tipo de empleado. El sistema debe tomar en cuenta los años transcurridos desde la fecha de contratacion. El sistema debe aplicar el comportamiento `calcularSalario()` | Media | 3 |
+| **HU-11** | Como **cliente**, quiero recibir notificaciones para estar informado de mis transacciones en el banco | El sistema debe notificar cada transaccion al cliente con el metodo  `void notificar(String mensaje)`. La informacion debe ser clara | Baja | 2 |
+| **HU-12** | Como **sistema auditor**, quiero consultar historial de transacciones para un control interno en el banco | El sistema debe mostrar los cambios realizados en las cuentas. El historial debe registrar el usuario y la feha de la transaccion | Media | 4 |
 
 ---
 
