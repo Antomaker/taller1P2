@@ -8,7 +8,7 @@ public class EstadoTransaccionInvalidoException extends BancoRuntimeException {
 
     // ── CONSTRUCTOR ───────────────────────────────────────────────────────
     public EstadoTransaccionInvalidoException(String estadoInicial, String estadoFinal) {
-        super("ERROR: Estado de transaccion invalido. No se puede pasar de: " + estadoInicial + " a " + estadoFinal);
+        super("[Error] Estado de transaccion invalido. No se puede pasar de: " + estadoInicial + " a " + estadoFinal);
         this.estadoInicial = estadoInicial;
         this.estadoFinal = estadoFinal;
     }

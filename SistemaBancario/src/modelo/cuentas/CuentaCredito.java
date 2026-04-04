@@ -1,12 +1,17 @@
 package modelo.cuentas;
 
 import java.time.LocalDateTime;
+
 import modelo.abstractas.Cuenta;
+import modelo.enums.TipoCuenta;
+import modelo.excepciones.CuentaBloqueadaException;
+import modelo.excepciones.DatoInvalidoException;
+import modelo.excepciones.SaldoInsuficienteException;
 import modelo.interfaces.Auditable;
 import modelo.interfaces.Consultable;
 import modelo.interfaces.Transaccionable;
 
-public class CuentaCredito extends Cuenta implements Consultable,Transaccionable, Auditable {
+public class CuentaCredito extends Cuenta implements Consultable, Transaccionable, Auditable {
 
     // ── ATRIBUTOS ───────────────────────────────────────────────────────
     private double limiteCredito;
@@ -14,18 +19,17 @@ public class CuentaCredito extends Cuenta implements Consultable,Transaccionable
     private double deudaActual;
 
     // ── CONSTRUCTOR ───────────────────────────────────────────────────────
-    public CuentaCredito(double limiteCredito, double tasaInteres, double deudaActual, String numeroCuenta, double saldo, LocalDateTime fechaCreacion, LocalDateTime ultimaModificacion, String usuarioModificacion) {
-        super(numeroCuenta, saldo, fechaCreacion, ultimaModificacion, usuarioModificacion);
+    public CuentaCredito(String numeroCuenta, double saldo, String usuarioModificacion,
+                         double limiteCredito, double tasaInteres, double deudaActual) {
+        super(numeroCuenta, saldo, usuarioModificacion);
         this.limiteCredito = limiteCredito;
         this.tasaInteres = tasaInteres;
         this.deudaActual = deudaActual;
     }
 
     // ── GETTERS ───────────────────────────────────────────────────────
-    public double getLimiteCredito() { return limiteCredito;}
-
+    public double getLimiteCredito() { return limiteCredito; }
     public double getTasaInteres() { return tasaInteres; }
-
     public double getDeudaActual() { return deudaActual; }
 
     // ── SETTERS ───────────────────────────────────────────────────────
@@ -44,7 +48,7 @@ public class CuentaCredito extends Cuenta implements Consultable,Transaccionable
     // ── MÉTODOS ABSTRACTOS HEREDADOS ───────────────────────────────────────────────────────
     @Override
     public double calcularInteres() {
-        throw new UnsupportedOperationException("Not supported yet."); 
+        return deudaActual * tasaInteres / 12; 
     }
 
     @Override
@@ -54,63 +58,82 @@ public class CuentaCredito extends Cuenta implements Consultable,Transaccionable
 
     @Override
     public String getTipoCuenta() {
-        throw new UnsupportedOperationException("Not supported yet."); 
+        return TipoCuenta.CREDITO.toString(); 
     }
 
     // ── MÉTODOS DE INTERFACES ───────────────────────────────────────────────────────
     @Override
     public String obtenerResumen() {
-        throw new UnsupportedOperationException("Not supported yet."); 
+        return "CUENTA CORRIENTE"
+            + "Numero de cuenta : "+ getNumeroCuenta()+""
+            + "Saldo: "+ getSaldo()
+            + "Tasa de interes: " + getTasaInteres()
+            + "Deuda actual: " + getDeudaActual()
+            + "Limite de credito: " + getLimiteRetiro();
     }
 
     @Override
     public boolean estaActivo() {
-        throw new UnsupportedOperationException("Not supported yet."); 
+        return !isBloqueada(); 
     }
 
     @Override
     public String obtenerTipo() {
-        throw new UnsupportedOperationException("Not supported yet."); 
+        return "Cuenta de credito"; 
     }
 
     @Override
-    public void depositar(double monto) {
-        throw new UnsupportedOperationException("Not supported yet."); 
+    public void depositar(double monto) throws CuentaBloqueadaException{
+        verificarBloqueada();
+        if (monto<=0) {
+            throw new DatoInvalidoException("Depositar", monto);
+            }
+        deudaActual-=monto; 
+        if (deudaActual<0) {
+            deudaActual=0;    
+        }
     }
 
     @Override
-    public void retirar(double monto) {
-        throw new UnsupportedOperationException("Not supported yet."); 
+    public void retirar(double monto) throws SaldoInsuficienteException, CuentaBloqueadaException{
+        verificarBloqueada();
+        if (monto <=0) {
+            throw new SaldoInsuficienteException(deudaActual, monto);
+        } if (monto>getLimiteRetiro()) {
+            throw new SaldoInsuficienteException(deudaActual, monto);
+        }
+        saldo+=monto; 
     }
 
     @Override
     public double calcularComision(double monto) {
-        throw new UnsupportedOperationException("Not supported yet.");
+       //FALTA CÓDIGO
+       return 0;
     }
 
     @Override
     public double consultarSaldo() {
-        throw new UnsupportedOperationException("Not supported yet."); 
+        return deudaActual; 
     }
 
     @Override
     public LocalDateTime obtenerFechaCreacion() {
-        throw new UnsupportedOperationException("Not supported yet."); 
+        return getFechaCreacion(); 
     }
 
     @Override
     public LocalDateTime obtenerUltimaModificacion() {
-        throw new UnsupportedOperationException("Not supported yet."); 
+       return getUltimaModificacion(); 
     }
 
     @Override
     public String obtenerUsuarioModificacion() {
-        throw new UnsupportedOperationException("Not supported yet."); 
+        return getUsuarioModificacion(); 
     }
 
     @Override
     public void registrarModificacion(String usuario) {
-        throw new UnsupportedOperationException("Not supported yet."); 
+        //FALTA CÓDIGO 
     }
 
     

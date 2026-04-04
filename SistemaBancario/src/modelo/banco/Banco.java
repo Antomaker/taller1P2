@@ -5,6 +5,7 @@ import modelo.abstractas.Cliente;
 import modelo.abstractas.Cuenta;
 import modelo.abstractas.Empleado;
 import modelo.excepciones.ClienteNoEncontradoException;
+import modelo.excepciones.DatoInvalidoException;
 
 public class Banco {
     
@@ -46,20 +47,18 @@ public class Banco {
     // ── SETTERS ───────────────────────────────────────────────────────
     public void setNombre(String nombre){
         if (nombre == null || nombre.isEmpty()) {
-            throw new IllegalArgumentException ("[Error] El campo no puede estar vacio");
+            throw new DatoInvalidoException("Nombre", "Vacio");
         }
         this.nombre = nombre;
     }
     
     // ── MÉTODOS ───────────────────────────────────────────────────────
     public void registrarCliente(Cliente c){
-        
+        // FALTA CÓDIGO
     }
     
     public void registrarEmpleado(Empleado e){
-        for (int i = 0; i < 50; i++) {
-            empleados[i].
-        }
+        // FALTA CÓDIGO
     }
     
     public void abrirCuenta(String idCliente, Cuenta c){
@@ -67,17 +66,21 @@ public class Banco {
     }
     
     public Cliente buscarCliente(String id) throws ClienteNoEncontradoException{
+        if (id == null || id.isBlank()) {
+            throw new DatoInvalidoException("ID", "Vacio");
+        }
+        
         Cliente clienteLocalizado = null;
         for (Cliente c : clientes) {
             if (c.getId().equalsIgnoreCase(id)) {
                 clienteLocalizado = c;
+                break;
             }
         }
         
         if (clienteLocalizado == null) {
-            throw new ClienteNoEncontradoException();
-        }
-        
+            throw new ClienteNoEncontradoException(id);
+        }   
         return clienteLocalizado;
     }
     
@@ -90,6 +93,6 @@ public class Banco {
     }
     
     public void calcularInteresesMensuales(){
-        
+        // FALTA CÓDIGO
     }
 }

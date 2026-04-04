@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 
 import modelo.abstractas.Cuenta;
 import modelo.enums.EstadoTransaccion;
+import modelo.excepciones.DatoInvalidoException;
 
 public class Transaccion {
     
@@ -14,7 +15,7 @@ public class Transaccion {
     private Cuenta cuentaDestino;
     private double monto;
     private EstadoTransaccion estado;
-    private LocalDateTime fecha;
+    private final LocalDateTime fecha; // final porque no cambia
     private String descripcion;
 
     // ── CONSTRUCTOR ───────────────────────────────────────────────────────
@@ -25,8 +26,8 @@ public class Transaccion {
         setCuentaOrigen(cuentaOrigen);
         setCuentaDestino(cuentaDestino);
         setMonto(monto);
-        setFecha(fecha);
         setDescripcion(descripcion);
+        this.fecha = LocalDateTime.now();
     }
 
     // ── GETTERS ───────────────────────────────────────────────────────
@@ -41,14 +42,14 @@ public class Transaccion {
     // ── SETTERS ───────────────────────────────────────────────────────
     public void setId(String id) {
         if (id == null || id.isEmpty()) {
-            throw new IllegalArgumentException("[Error] El campo no puede estar vacio");
+            throw new DatoInvalidoException("ID", "Vacio");
         }
         this.id = id;
     }
 
     public void setCuentaOrigen(Cuenta cuentaOrigen) {
         if (cuentaOrigen == null) {
-            throw new IllegalArgumentException("[Error] El campo no puede estar vacio");
+            throw new DatoInvalidoException("Cuenta Origen", "Vacio");
         }
         this.cuentaOrigen = cuentaOrigen;
     }
@@ -60,21 +61,14 @@ public class Transaccion {
 
     public void setMonto(double monto) {
         if (monto < 0) {
-            throw new IllegalArgumentException("[Error] El monto debe ser > 0");
+            throw new DatoInvalidoException("Monto", monto);
         }
         this.monto = monto;
     }
 
-    public void setFecha(LocalDateTime fecha) {
-        if (!fecha.equals(LocalDate.now())) {
-            throw new IllegalArgumentException("[Error] La fecha debe ser hoy");
-        }
-        this.fecha = fecha;
-    }
-
     public void setDescripcion(String descripcion) {
         if (descripcion == null || descripcion.isEmpty()) {
-            throw new IllegalArgumentException("[Error] El campo no puede estar vacio");
+            throw new DatoInvalidoException("Descripcion", "Vacio");
         }
         this.descripcion = descripcion;
     }

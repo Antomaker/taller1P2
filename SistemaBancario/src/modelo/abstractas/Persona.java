@@ -1,6 +1,7 @@
 package modelo.abstractas;
 
 import java.time.LocalDate;
+import modelo.excepciones.DatoInvalidoException;
 
 public abstract class Persona {
     
@@ -31,35 +32,35 @@ public abstract class Persona {
     // ── SETTERS ───────────────────────────────────────────────────────
     public void setId(String id) {
         if (id == null || id.isEmpty()) {
-            throw new IllegalArgumentException("[Error] El campo no puede estar vacio");
+            throw new DatoInvalidoException("ID", "Vacio");
         }
         this.id = id;
     }
 
     public void setNombre(String nombre) {
         if (nombre == null || nombre.isEmpty()) {
-            throw new IllegalArgumentException("[Error] El campo no puede estar vacio");
+            throw new DatoInvalidoException("Nombre", "Vacio");
         }
         this.nombre = nombre;
     }
 
     public void setApellido(String apellido) {
         if (apellido == null || apellido.isEmpty()) {
-            throw new IllegalArgumentException("[Error] El campo no puede estar vacio");
+            throw new DatoInvalidoException("Apellido", "Vacio");
         }
         this.apellido = apellido;
     }
 
     public void setFechaNacimiento(LocalDate fechaNacimiento) {
         if (fechaNacimiento.isAfter(LocalDate.now())) {
-            throw new IllegalArgumentException("[Error] La fecha no puede estar en el futuro");
+            throw new DatoInvalidoException("Fecha de Nacimiento", "Fecha futura");
         }
         this.fechaNacimiento = fechaNacimiento;
     }
 
     public void setEmail(String email) {
         if (!email.contains("@")) {
-            throw new IllegalArgumentException("[Error] Correo invalido");
+            throw new DatoInvalidoException("Email", "Email invalido");
         }
         this.email = email;
     }

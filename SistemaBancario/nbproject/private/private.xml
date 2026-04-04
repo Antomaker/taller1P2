@@ -3,9 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Administrator/Downloads/Taller1P2-SGB--main/Taller1P2-SGB--main/SistemaBancario/src/modelo/banco/Banco.java</file>
-            <file>file:/C:/Users/Administrator/Downloads/Taller1P2-SGB--main/Taller1P2-SGB--main/SistemaBancario/src/modelo/cuentas/CuentaCorriente.java</file>
-            <file>file:/C:/Users/Administrator/Downloads/Taller1P2-SGB--main/Taller1P2-SGB--main/SistemaBancario/src/modelo/cuentas/CuentaAhorros.java</file>
+            <file>file:/C:/Users/Administrator/Downloads/Taller1P2-SGB--06d41369e981620590008322c1c53835a42bdf62/Taller1P2-SGB--06d41369e981620590008322c1c53835a42bdf62/SistemaBancario/src/modelo/cuentas/CuentaAhorros.java</file>
+            <file>file:/C:/Users/Administrator/Downloads/Taller1P2-SGB--06d41369e981620590008322c1c53835a42bdf62/Taller1P2-SGB--06d41369e981620590008322c1c53835a42bdf62/SistemaBancario/src/modelo/abstractas/Cuenta.java</file>
+            <file>file:/C:/Users/Administrator/Downloads/Taller1P2-SGB--06d41369e981620590008322c1c53835a42bdf62/Taller1P2-SGB--06d41369e981620590008322c1c53835a42bdf62/SistemaBancario/src/modelo/cuentas/CuentaCorriente.java</file>
+            <file>file:/C:/Users/Administrator/Downloads/Taller1P2-SGB--06d41369e981620590008322c1c53835a42bdf62/Taller1P2-SGB--06d41369e981620590008322c1c53835a42bdf62/SistemaBancario/src/modelo/cuentas/CuentaCredito.java</file>
         </group>
     </open-files>
 </project-private>

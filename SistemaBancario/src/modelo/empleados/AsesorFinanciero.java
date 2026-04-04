@@ -7,6 +7,7 @@ import java.time.temporal.ChronoUnit;
 
 import modelo.abstractas.Cliente;
 import modelo.abstractas.Empleado;
+import modelo.excepciones.DatoInvalidoException;
 
 public class AsesorFinanciero extends Empleado {
     
@@ -28,7 +29,7 @@ public class AsesorFinanciero extends Empleado {
     }
     
     // ── GETTERS ───────────────────────────────────────────────────────
-    public double getComisionBase(){ return comisionBase;}
+    public double getComisionBase(){ return comisionBase; }
     public double getMetasMensuales(){ return metasMensuales; }
     
     public Cliente[] getClientesAsignados(){
@@ -40,14 +41,14 @@ public class AsesorFinanciero extends Empleado {
     // ── SETTERS ───────────────────────────────────────────────────────
     public void setComisionBase(double comisionBase){
         if (comisionBase < 0) {
-            throw new IllegalArgumentException("[Error] La comision debe ser > 0");
+            throw new DatoInvalidoException("Comision Base", comisionBase);
         }
         this.comisionBase = comisionBase;
     }
     
     public void setMetasMensuales(double metasMensuales){
         if (metasMensuales < 0) {
-            throw new IllegalArgumentException("[Error] La meta mensual debe ser > 0");
+            throw new DatoInvalidoException("Metas Mensuales", metasMensuales);
         }
         this.metasMensuales = metasMensuales;
     }

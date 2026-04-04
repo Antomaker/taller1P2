@@ -1,7 +1,12 @@
 package modelo.cuentas;
 
 import java.time.LocalDateTime;
+
 import modelo.abstractas.Cuenta;
+import modelo.enums.TipoCuenta;
+import modelo.excepciones.CuentaBloqueadaException;
+import modelo.excepciones.DatoInvalidoException;
+import modelo.excepciones.SaldoInsuficienteException;
 import modelo.interfaces.Auditable;
 import modelo.interfaces.Consultable;
 import modelo.interfaces.Transaccionable;
@@ -13,98 +18,122 @@ public class CuentaCorriente extends Cuenta implements Consultable, Transacciona
     private double comisionMantenimiento;
 
     // ── CONSTRUCTOR ───────────────────────────────────────────────────────
-    public CuentaCorriente(double montoSobregiro, double comisionMantenimiento, String numeroCuenta, double saldo, LocalDateTime fechaCreacion, LocalDateTime ultimaModificacion, String usuarioModificacion) {
-        super(numeroCuenta, saldo, fechaCreacion, ultimaModificacion, usuarioModificacion);
+    public CuentaCorriente(String numeroCuenta, double saldo, String usuarioModificacion,
+                           double montoSobregiro, double comisionMantenimiento) {
+        super(numeroCuenta, saldo, usuarioModificacion);
         this.montoSobregiro = montoSobregiro;
         this.comisionMantenimiento = comisionMantenimiento;
     }
 
     // ── GETTERS ───────────────────────────────────────────────────────
     public double getMontoSobregiro() { return montoSobregiro; }
-
     public double getComisionMantenimiento() { return comisionMantenimiento; }
-    
     
     // ── SETTERS ───────────────────────────────────────────────────────
     public void setMontoSobregiro(double montoSobregiro) {
+        if (montoSobregiro<0) {
+            throw new DatoInvalidoException("Monto Sobregiro", saldo);     
+        }
         this.montoSobregiro = montoSobregiro;
     }
 
     public void setComisionMantenimiento(double comisionMantenimiento) {
+        if (comisionMantenimiento<0) {
+            throw new DatoInvalidoException("Comision de mantenimiento", saldo);
+        }
         this.comisionMantenimiento = comisionMantenimiento;
     }
-    
     
     // ── MÉTODOS ABSTRACTOS HEREDADOS ───────────────────────────────────────────────────────
     @Override
     public double calcularInteres() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return 0.0;
     }
 
-    @Override
+    @Override //Aún no ha sido aplicado
     public double getLimiteRetiro() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public String getTipoCuenta() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
+    return TipoCuenta.CORRIENTE.toString();
+        }
 
     // ── MÉTODOS DE INTERFACES ───────────────────────────────────────────────────────
+   
+    //METODOS DE CONSULTABLE
+    
     @Override
     public String obtenerResumen() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
+    return "CUENTA CORRIENTE"
+            + "Numero de cuenta : "+ getNumeroCuenta()
+            + "Saldo: "+ getSaldo()
+            + "Monto sobregiro: " + getMontoSobregiro();}
 
     @Override
     public boolean estaActivo() {
-        throw new UnsupportedOperationException("Not supported yet.");
+       return !isBloqueada();
     }
 
     @Override
     public String obtenerTipo() {
-        throw new UnsupportedOperationException("Not supported yet.");
+       return "Cuenta Corriente";
     }
 
     @Override
-    public void depositar(double monto) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void depositar(double monto) throws CuentaBloqueadaException{
+        verificarBloqueada();
+        if (monto<=0) {
+            throw new DatoInvalidoException("Depositar", monto);
+            }
+        saldo+=monto;
     }
 
+    //MÉTODOS DE TRANSACCIONABLE
+    
     @Override
-    public void retirar(double monto) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void retirar(double monto) throws SaldoInsuficienteException, CuentaBloqueadaException {
+        verificarBloqueada();
+        if (monto <=0) {
+            throw new SaldoInsuficienteException(saldo, montoSobregiro);
+        } if (monto>getLimiteRetiro()) {
+            throw new SaldoInsuficienteException(saldo, montoSobregiro);
+        }
+        saldo-=monto;
+        
     }
 
     @Override
     public double calcularComision(double monto) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return comisionMantenimiento;
     }
 
     @Override
     public double consultarSaldo() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return saldo;
     }
 
+    //MÉTODOS DE AUDITABLE
+    
     @Override
     public LocalDateTime obtenerFechaCreacion() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return getFechaCreacion();
     }
 
     @Override
     public LocalDateTime obtenerUltimaModificacion() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return getUltimaModificacion();
     }
 
     @Override
     public String obtenerUsuarioModificacion() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return getUsuarioModificacion();
     }
 
     @Override
     public void registrarModificacion(String usuario) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        //FALTA CÓDIGO
     }
 
 }

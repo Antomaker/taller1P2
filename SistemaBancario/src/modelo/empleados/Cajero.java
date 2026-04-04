@@ -6,6 +6,7 @@ import java.time.temporal.ChronoUnit; // Para calcularEdad()
 
 import modelo.abstractas.Empleado;
 import modelo.enums.Turno;
+import modelo.excepciones.DatoInvalidoException;
 
 public class Cajero extends Empleado{
     
@@ -36,12 +37,12 @@ public class Cajero extends Empleado{
     
     // ── SETTERS ───────────────────────────────────────────────────────
     public void setTurno(Turno turno) {
-        
+        this.turno = turno;
     }
     
     public void setSucursalAsignada(String sucursalAsignada){
         if (sucursalAsignada == null || sucursalAsignada.isEmpty()) {
-            throw new IllegalArgumentException("[Error] El campo no puede estar vacio");
+            throw new DatoInvalidoException("Sucursal Asignada", "Vacio");
         }
         this.sucursalAsignada = sucursalAsignada;
     }

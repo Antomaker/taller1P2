@@ -3,6 +3,7 @@ package modelo.abstractas;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit; // Para calcularAntiguedad()
+import modelo.excepciones.DatoInvalidoException;
 
 
 public abstract class Empleado extends Persona{
@@ -33,21 +34,21 @@ public abstract class Empleado extends Persona{
     // ── SETTERS ───────────────────────────────────────────────────────
     public void setLegajo(String legajo){
         if (legajo == null || legajo.isEmpty()) {
-            throw new IllegalArgumentException ("[Error] El campo no puede estar vacio");
+            throw new DatoInvalidoException("Legajo", "Vacio");
         }
         this.legajo = legajo;
     }
     
     public void setFechaContratacion(LocalDate fechaContratacion){
         if (fechaContratacion.isAfter(LocalDate.now())) {
-            throw new IllegalArgumentException ("[Error] La fecha no puede estar en el futuro");
+            throw new DatoInvalidoException("Fecha de Contratacion", "Fecha futura");
         }
         this.fechaContratacion = fechaContratacion;
     }
     
     public void setSalarioBase(double salarioBase){
-        if (salarioBase > 0) {
-            throw new IllegalArgumentException ("[Error] El salario debe ser > 0");
+        if (salarioBase < 0) {
+            throw new DatoInvalidoException("Salario Base", salarioBase);
         }
         this.salarioBase = salarioBase;
     }

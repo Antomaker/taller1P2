@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
 import modelo.abstractas.Empleado;
+import modelo.excepciones.DatoInvalidoException;
 
 public class GerenteSucursal extends Empleado{
     
@@ -39,14 +40,14 @@ public class GerenteSucursal extends Empleado{
     // ── SETTERS ───────────────────────────────────────────────────────
     public void setSucursal(String sucursal){
         if (sucursal == null || sucursal.isEmpty()) {
-            throw new IllegalArgumentException("[Error] El campo no puede estar vacio");
+            throw new DatoInvalidoException("Sucursal", "Vacio");
         }
         this.sucursal = sucursal;
     }
     
     public void setPresupuestoAnual(double presupuestoAnual){
-        if (presupuestoAnual < 0) {
-            throw new IllegalArgumentException("[Error] El presupuesto anual debe ser > 0");
+        if (presupuestoAnual <= 0) {
+            throw new DatoInvalidoException("Presupuesto Anual", presupuestoAnual);
         }
         this.presupuestoAnual = presupuestoAnual;
     }

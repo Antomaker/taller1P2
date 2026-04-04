@@ -2,7 +2,6 @@ package modelo.abstractas;
  
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit; // Para calcularEdad()
 
 import modelo.excepciones.CapacidadExcedidaException;
 import modelo.excepciones.DatoInvalidoException;
@@ -10,7 +9,7 @@ import modelo.excepciones.DatoInvalidoException;
 public abstract class Cliente extends Persona {
  
     // ── ATRIBUTOS ────────────────────────────────────────────
-    private static final int maxCuentas = 5; // Máximo de cuentas
+    private static final int maxCuentas = 5; // Máximo de cuentas p/c
     private Cuenta[] cuentas;
     private int totalCuentas;
     private boolean activo;
@@ -49,7 +48,7 @@ public abstract class Cliente extends Persona {
     
     protected void setUsuarioModificacion(String usuarioModificacion) {
         if (usuarioModificacion == null || usuarioModificacion.isBlank()) {
-            throw new DatoInvalidoException();
+            throw new DatoInvalidoException("Usuario Modificacion", "Vacio");
         }
         this.usuarioModificacion = usuarioModificacion;
         this.ultimaModificacion  = LocalDateTime.now();
@@ -58,13 +57,13 @@ public abstract class Cliente extends Persona {
     // ── MÉTODOS CONCRETOS ───────────────────────────────────────────────────────
     public void agregarCuenta(Cuenta cuenta) throws CapacidadExcedidaException {
         if (cuenta == null) {
-            throw new DatoInvalidoException();
+            throw new DatoInvalidoException("Cuenta", "Vacio");
         }
         if (totalCuentas >= maxCuentas) {
-            throw new CapacidadExcedidaException();
+            throw new CapacidadExcedidaException(5);
         }
         cuentas[totalCuentas] = cuenta;
         totalCuentas++;
     }
-
+    
 }

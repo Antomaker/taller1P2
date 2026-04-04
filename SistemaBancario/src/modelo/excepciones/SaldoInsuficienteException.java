@@ -8,7 +8,7 @@ public class SaldoInsuficienteException extends SistemaBancarioException {
     // ── CONSTRUCTOR ───────────────────────────────────────────────────────
     public SaldoInsuficienteException(double saldoActual, double montoSolicitado) {
 
-        super("ERROR: Saldo insuficiente. Tiene disponible: " + saldoActual + "pero solicita: " + montoSolicitado);
+        super("[Error] Saldo insuficiente. Tiene disponible: " + saldoActual + " pero solicita: " + montoSolicitado);
         this.saldoActual = saldoActual;
         this.montoSolicitado = montoSolicitado;
     }
