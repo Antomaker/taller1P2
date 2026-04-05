@@ -2,7 +2,7 @@
 skinparam classAttributeIconSize 0
 skinparam packageStyle rectangle
 
-packge "modelo.interfaces" {
+package "modelo.interfaces" {
     interface Consultable {
         + obtenerResumen() : String
         + estadoActivo() : boolean
@@ -30,7 +30,7 @@ packge "modelo.interfaces" {
     }
 }
 
-packge "modelo.enums" {
+package "modelo.enums" {
     enum EstadoTransaccion {
         PENDIENTE
         PROCESANDO
