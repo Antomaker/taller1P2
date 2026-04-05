@@ -1,0 +1,9 @@
+com\mycompany\sistemabancariodemo\SistemaBancarioDemo.class
+com\mycompany\sistemabancariodemo\modelo\enums\EstadoTransaccion.class
+com\mycompany\sistemabancariodemo\modelo\interfacee\Auditable.class
+com\mycompany\sistemabancariodemo\modelo\enums\TipoDeDocumento.class
+com\mycompany\sistemabancariodemo\modelo\enums\Turno.class
+com\mycompany\sistemabancariodemo\modelo\interfacee\Transaccionable.class
+com\mycompany\sistemabancariodemo\modelo\enums\TipoDeCuenta.class
+com\mycompany\sistemabancariodemo\modelo\interfacee\Notificable.class
+com\mycompany\sistemabancariodemo\modelo\interfacee\Consultable.class
