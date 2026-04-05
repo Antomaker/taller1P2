@@ -78,4 +78,99 @@ package "modelo.excepciones" {
     SitemaBancarioException <|-- CuentaBloqueadaException
     SistemaBancarioException <|-- ClienteNoEncontradoException
     SistemaBancarioException <|-- CapacidadExcedidaException
+
+    RuntimeExcepcion <|-- BancoRuntimeException
+    BancoRuntimeException <|-- DatoInvalidoException
+    BancoRuntimeException <|-- EstadoTransaccionInvalidaException
+    BancoRuntimeException <|-- PermisoInsuficienteException
+
+    SaldoInsuficienteException: - saldoActual: double
+    SaldoInsuficienteException: - montoSolicitado: double
+    ClienteNoEncontradoException: - idCliente: String 
+    CapacidadExcedidaException: - campo: String 
+    DatoInvalidoException: - valorRecibido: String
 }
+
+package "modelo.abstractas" {
+    abstract class Persona {
+        - id: String
+        - nombre: String
+        - apellido: String
+        - fechaNacimiento: LocalDate
+        - email: String
+        + {abstract} calcularEdad(): int
+        + {abstract} obtenerTipoDocumento(): String
+        + {abstract} obtenerDocumentoIdentidad(): String
+        + getNombreCompleto(): String
+    }
+
+    abstract class Empleado {
+        - legajo: String
+        - fechaContratacion: LocalDate
+        + {abstract} calcularSalario(): double
+        + {abstract} calcularBono(): double
+        + calcularAntiguedad(): int
+    }
+
+    abstract class Cuenta {
+        - numeroCuenta: String
+        - saldo: double
+        - bloqueada: boolean
+        - fechaCreacion: LocalDateTime
+        - ultimaModificacion: LocalDateTime
+        - usuarioModificacion: String
+        - {static} historial: Transaccion[20]
+        + {abstract} calcularInteres(): double
+        + {abstract} getLimiteRetiro(): double
+        + {abstract} getTipoCuenta(): String
+        + verificarBloqueada(): void
+        + agregarAlHistorial(t: Transaccion): void
+        + getHistorial(): Transaccion[]
+    }
+
+    Persoan <|-- Empleado
+}
+
+package "modelo.personas" {
+    class ClienteNatural {
+        - tipoDocumento: TipoDocumento
+        - numeroDocumento: String
+        - cuentas: cuenta[5]
+    }
+
+    class ClienteEmpresarial {
+        - nit: String
+        - razonSocial: String
+        -representacionLegal: String
+        - cuentas: Cuenta[5]
+    }
+
+    Persona <|-- ClienteNatural
+    Persona <|-- ClienteEmpresarial
+}
+
+package "modelo.empleados" {
+    class Cajero {
+        - turno: Turno
+        - sucursalAsignada: String
+        - transaccionnesDia: int
+    }
+
+    class AsesorFinanciero {
+        - comisionBase: double
+        - metasMensuales: double
+        - clientesAsignados: ClienteNatural[20]
+    }
+
+    class GerenteSucursal {
+        - sucursal: String
+        - presupuestoMensual: double
+        - empleadosACargo: Empleado[30]
+        + aprobarCredito(): void
+    }
+
+    Empleado <|-- Cajero
+    Empleado <|-- AsesorFinanciero
+    Empleado <|-- GerenteSucursal
+}
+
