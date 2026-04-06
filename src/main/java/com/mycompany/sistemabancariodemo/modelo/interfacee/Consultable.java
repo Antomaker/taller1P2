@@ -13,9 +13,9 @@ package com.mycompany.sistemabancariodemo.modelo.interfacee;
 //1.INTERFACE-CONSULTABLE
 public interface Consultable {
     
-    public String ObtenerResumen();
+    public String obtenerResumen();
     
-    public boolean EstaActivo();
+    public boolean estaActivo();
     
-    public String ObtenerTipo();
+    public String obtenerTipo();
 }
