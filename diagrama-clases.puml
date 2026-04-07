@@ -1,0 +1,283 @@
+@startuml diagrama-clases
+skinparam packageStyle rectangle
+
+package "modelo.interfaces" {
+    interface Consultable {
+        + obtenerResumen() : String
+        + estaActivo() : boolean
+        + obtenerTipo() : String
+    }
+
+    interface Transaccionable {
+        + depositar(monto: double) : void
+        + retirar(monto: double) : void
+        + calcularComision(monto: double) : double
+        + consultarSaldo() : double
+    }
+
+    interface Auditable {
+        + obtenerFechaCreacion(): LocalDateTime
+        + obtenerUltimaModificacion(): LocalDateTime
+        + obtenerUsuarioModificacion(): String
+        + registrarModificacion(usuario: String): void
+    }
+
+    interface Notificable {
+        + notificar(mensaje: String): void
+        + obtenerContacto(): String
+        + aceptaNotificaciones(): boolean
+    }
+}
+
+package "modelo.enums" {
+    enum EstadoTransaccion {
+        PENDIENTE
+        PROCESANDO
+        COMPLETADA
+        RECHAZADA
+        REVERTIDA
+    }
+
+    enum TipoCuenta {
+        CORRIENTE
+        AHORROS
+        CREDITO
+    }
+
+    enum Turno {
+        MAÑANA
+        TARDE
+        NOCHE
+    }
+
+    enum TipoDocumento {
+        CEDULA
+        PASAPORTE
+        NIT
+        CEDULA_EXTRANJERIA
+    }
+}
+
+package "modelo.excepciones" {
+    class Exception <<external>>
+    class RuntimeException <<external>>
+
+    class SistemaBancarioException {
+        - codigoError: String
+        - timestamp: LocalDateTime
+        + toString(): String
+    }
+
+    class BancoRuntimeException {
+        + toString(): String
+    }
+
+    Exception <|-- SistemaBancarioException
+    SistemaBancarioException <|-- SaldoInsuficienteException
+    SistemaBancarioException <|-- CuentaBloqueadaException
+    SistemaBancarioException <|-- ClienteNoEncontradoException
+    SistemaBancarioException <|-- CapacidadExcedidaException
+
+    RuntimeException <|-- BancoRuntimeException
+    BancoRuntimeException <|-- DatoInvalidoException
+    BancoRuntimeException <|-- EstadoTransaccionInvalidoException
+    BancoRuntimeException <|-- PermisoInsuficienteException
+
+    class SaldoInsuficienteException {
+        - saldoActual: double
+        - montoSolicitado: double
+    }
+    class ClienteNoEncontradoException {
+        - idCliente: String
+    }
+    class CapacidadExcedidaException {
+        - capacidadMaxima: int
+    }
+    class DatoInvalidoException {
+        - campo: String
+        - valorRecibido: Object
+    }
+}
+
+package "modelo.abstractas" {
+    abstract class Persona {
+        - id: String
+        - nombre: String
+        - apellido: String
+        - fechaNacimiento: LocalDate
+        - email: String
+        + {abstract} calcularEdad(): int
+        + {abstract} obtenerTipo(): String
+        + {abstract} obtenerDocumentoIdentidad(): String
+        + getNombreCompleto(): String
+    }
+
+    abstract class Cliente {
+        + {abstract} agregarCuenta(c: Cuenta): void
+        + {abstract} getCuentas(): Cuenta[]
+    }
+
+    abstract class Empleado {
+        - legajo: String
+        - fechaContratacion: LocalDate
+        - salarioBase: double
+        - activo: boolean
+        + {abstract} calcularSalario(): double
+        + {abstract} calcularBono(): double
+        + calcularAntiguedad(): int
+    }
+
+    abstract class Cuenta {
+        - numeroCuenta: String
+        - saldo: double
+        - bloqueada: boolean
+        - fechaCreacion: LocalDateTime
+        - ultimaModificacion: LocalDateTime
+        - usuarioModificacion: String
+        - historial: Transaccion[20]
+        + {abstract} calcularInteres(): double
+        + {abstract} getLimiteRetiro(): double
+        + {abstract} getTipoCuenta(): String
+        + verificarBloqueada(): void
+        + agregarAlHistorial(t: Transaccion): void
+        + getHistorial(): Transaccion[]
+    }
+
+    Persona <|-- Cliente
+    Persona <|-- Empleado
+}
+
+package "modelo.personas" {
+    class ClienteNatural {
+        - tipoDocumento: TipoDocumento
+        - numeroDocumento: String
+        - cuentas: Cuenta[5]
+    }
+
+    class ClienteEmpresarial {
+        - nit: String
+        - razonSocial: String
+        - representacionLegal: String
+        - cuentas: Cuenta[5]
+    }
+
+    Cliente <|-- ClienteNatural
+    Cliente <|-- ClienteEmpresarial
+}
+
+package "modelo.empleados" {
+    class Cajero {
+        - turno: Turno
+        - sucursalAsignada: String
+        - transaccionesDia: int
+    }
+
+    class AsesorFinanciero {
+        - comisionBase: double
+        - metasMensuales: double
+        - clientesAsignados: Cliente[20]
+    }
+
+    class GerenteSucursal {
+        - sucursal: String
+        - presupuestoMensual: double
+        - empleadosACargo: Empleado[30]
+        + aprobarCredito(solicitante: Empleado): void
+    }
+
+    Empleado <|-- Cajero
+    Empleado <|-- AsesorFinanciero
+    Empleado <|-- GerenteSucursal
+}
+
+package "modelo.cuentas" {
+    class CuentaCorriente {
+        - montoSobregiro: double
+        - comisionMantenimiento: double
+    }
+    class CuentaAhorros {
+        - tasaInteres: double
+        - retirosMesActual: int
+        - maxRetirosMes: int
+    }
+    class CuentaCredito {
+        - limiteCredito: double
+        - tasaInteres: double
+        - deudaActual: double
+    }
+
+    Cuenta <|-- CuentaCorriente
+    Cuenta <|-- CuentaAhorros
+    Cuenta <|-- CuentaCredito
+}
+
+package "modelo.banco" {
+    class Banco {
+        - nombre: String
+        - empleados: Empleado[50]
+        - clientes: Cliente[200]
+        - cuentas: Cuenta[500]
+        + registrarCliente(c: Cliente): void
+        + registrarEmpleado(e: Empleado): void
+        + abrirCuenta(idCliente: String, c: Cuenta): void
+        + buscarCliente(id: String): Cliente
+        + realizarTransferencia(origen: Cuenta, destino: Cuenta, monto: double): void
+        + calcularNominaTotal(): double
+        + calcularInteresesMensuales(): void
+    }
+
+    class Transaccion {
+        - id: String
+        - monto: double
+        - estado: EstadoTransaccion
+        - fecha: LocalDateTime
+        - descripcion: String
+        + cambiarEstado(nuevo: EstadoTransaccion): void
+        + generarComprobante(): String
+    }
+}
+
+' Relaciones de Realización (Interfaces)
+Cliente ..|> Consultable
+Cliente ..|> Notificable
+Cliente ..|> Auditable
+
+AsesorFinanciero ..|> Consultable
+AsesorFinanciero ..|> Auditable
+
+GerenteSucursal ..|> Consultable
+GerenteSucursal ..|> Auditable
+
+CuentaCorriente ..|> Consultable
+CuentaCorriente ..|> Transaccionable
+CuentaCorriente ..|> Auditable
+
+CuentaAhorros ..|> Consultable
+CuentaAhorros ..|> Transaccionable
+CuentaAhorros ..|> Auditable
+
+CuentaCreddito ..|> Consultable
+CuentaCredito ..|> Transaccionable
+CuentaCredito ..|> Auditable
+
+Banco ..|> Auditable
+
+' Relaciones de Asociación y Composición
+Banco "1" *-- "0..50" Empleado : posee >
+Banco "1" *-- "0..200" Cliente : gestiona >
+Banco "1" *-- "0..500" Cuenta : administra >
+
+Cliente "1" o-- "0..5" Cuenta : tiene >
+Cuenta "1" o-- "0..20" Transaccion : registra >
+
+Transaccion --> "1" Cuenta : origen
+Transaccion --> "0..1" Cuenta : destino
+
+' Dependencias de Excepciones
+Banco ..> CapacidadExcedidaException : <<throws>>
+Banco ..> ClienteNoEncontradoException : <<throws>>
+Transaccionable ..> SaldoInsuficienteException : <<throws>>
+Transaccionable ..> CuentaBloqueadaException : <<throws>>
+GerenteSucursal ..> PermisoInsuficienteException : <<throws>>
+
+@enduml
