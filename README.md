@@ -1,4 +1,4 @@
-# taller1P2
+# Taller1P2
 Evaluación de conocimientos hasta el corte 2
 
 # 🏦 Sistema de Gestión Bancaria (SGB)
@@ -55,8 +55,15 @@ A continuación se listan **todas** las historias de usuario del sistema. Cada h
 
 | ID | Historia | Criterios de Aceptación | Prioridad | Story Points |
 |:---|:---|:---|:---:|:---:|
-| **HU-01** | Como **cajero**, quiero registrar un cliente natural con sus datos personales para aperturar una cuenta en el sistema | - El sistema valida que el documento de identidad no esté repetido. El sistema lanza `CapacidadExcedidaException` si el banco alcanzó su límite de clientes. Los datos nulos o vacíos lanzan 
-
+| **HU-01** | Como **cajero**, quiero registrar un cliente natural con sus datos personales para aperturar una cuenta en el sistema | - El sistema valida que el documento de identidad no esté repetido. El sistema lanza `CapacidadExcedidaException` si el banco alcanzó su límite de clientes. Los datos nulos o vacíos lanzan "DatoInvalidoException". El email debe contener @ para ser válido y la fecha no debe ser futura.
+|:---|:---|:---:|:---:|
+| **HU-02** | Como **cajero**, quiero registrar un cliente empresarial con su NIT y razón social para vincularlo y permitirle operar en el sistema del banco| Alta | 5 |
+|:---|:---|:---:|:---:|
+| **HU-03** | Como **cajero**, quiero abrir una cuenta a un cliente existente para que pueda operar en el banco | Alta | 3 |
+|:---|:---|:---:|:---:|
+| **HU-04** | Como **cajero**, quiero registrar depósitos en una cuenta para aumentar el saldo del cliente | Alta | 8 |
+|:---|:---|:---:|:---:|
+---
 ---
 
 ## 🏗️ Requisitos de Diseño UML
