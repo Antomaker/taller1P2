@@ -127,9 +127,10 @@ public class Banco implements Auditable{
         }
         
         Cliente clienteLocalizado = null;
-        for (Cliente c : clientes) {
-            if (c.getId().equalsIgnoreCase(id)) {
-                clienteLocalizado = c;
+        
+        for (int i = 0; i < totalClientes; i++) {
+            if (clientes[i].getId().equalsIgnoreCase(id)){
+                clienteLocalizado = clientes[i];
                 break;
             }
         }

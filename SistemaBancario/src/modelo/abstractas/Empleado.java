@@ -47,7 +47,7 @@ public abstract class Empleado extends Persona{
     }
     
     public void setSalarioBase(double salarioBase){
-        if (salarioBase < 0) {
+        if (salarioBase <= 0) {
             throw new DatoInvalidoException("Salario Base", salarioBase);
         }
         this.salarioBase = salarioBase;

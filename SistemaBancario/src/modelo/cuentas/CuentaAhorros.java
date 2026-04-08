@@ -33,14 +33,14 @@ public class CuentaAhorros extends Cuenta implements Consultable, Transaccionabl
 
     // ── SETTERS ───────────────────────────────────────────────────────
     public void setTasaInteres(double tasaInteres) {
-        if (tasaInteres<0) {
+        if (tasaInteres < 0) {
             throw new DatoInvalidoException("Tasa de interes", tasaInteres); 
         }
         this.tasaInteres = tasaInteres;
     }
 
     public void setMaxRetirosmes(int maxRetirosMes) {
-        if (maxRetirosMes<0) {
+        if (maxRetirosMes < 0) {
             throw new DatoInvalidoException("Maximo de retiros mensuales", maxRetirosMes);
             }
         this.maxRetirosMes = maxRetirosMes;
@@ -93,7 +93,7 @@ public class CuentaAhorros extends Cuenta implements Consultable, Transaccionabl
         if (monto <= 0) {
             throw new DatoInvalidoException("Depositar", monto);
         }
-        saldo += monto; 
+        setSaldo(getSaldo() + monto);
     }
 
     @Override
@@ -104,7 +104,7 @@ public class CuentaAhorros extends Cuenta implements Consultable, Transaccionabl
         } if (monto > getLimiteRetiro()) {
             throw new SaldoInsuficienteException(getSaldo(), monto);
         }
-        saldo -= monto;
+        setSaldo(getSaldo() - monto);
         retirosMesActual++;
     }
 
@@ -112,7 +112,7 @@ public class CuentaAhorros extends Cuenta implements Consultable, Transaccionabl
     public double calcularComision(double monto) {
         /*Las cuentas de ahorros generalmente no cobran comisión si se mantiene 
         dentro de un número de retiros, y se cobran si excede el límite*/
-        if (retirosMesActual>maxRetirosMes) {
+        if (retirosMesActual > maxRetirosMes) {
             return monto * 0.02; 
         }
         return 0;
@@ -141,9 +141,10 @@ public class CuentaAhorros extends Cuenta implements Consultable, Transaccionabl
 
     @Override
     public void registrarModificacion(String usuario) {
-       if (usuario == null || usuario.isBlank()) {
+        if (usuario == null || usuario.isBlank()) {
             throw new DatoInvalidoException("Usuario", "Vacio");
         }
+        
         setUsuarioModificacion(usuario);
         setUltimaModificacion();
     }

@@ -117,7 +117,7 @@ public class GerenteSucursal extends Empleado implements Consultable, Auditable{
              + "FechaContratacion : " + getFechaContratacion() + "\n"
              + "Legajo : " + getLegajo() + "\n"
              + "Salario Base : " + getSalarioBase() + "\n"
-             + "Sucursal : " + getSalarioBase() + "\n"
+             + "Sucursal : " + getSucursal() + "\n"
              + "Presupuesto Anual : " + getPresupuestoAnual();
     }
 

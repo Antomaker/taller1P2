@@ -348,7 +348,7 @@ public class SistemaBancarioDemo {
                                          ESCENARIO 11
                            =======================================""");
         
-        CuentaAhorros cuenta = (CuentaAhorros) clienteN1.buscarCuenta("CA-001");
+        Cuenta cuenta = clienteN1.buscarCuenta("CA-001");
         
         cuenta.registrarModificacion("Asesor Financiero");
 

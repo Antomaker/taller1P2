@@ -87,7 +87,7 @@ public class CuentaCorriente extends Cuenta implements Consultable, Transacciona
         if (monto <= 0) {
             throw new DatoInvalidoException("Depositar", monto);
             }
-        saldo += monto;
+        setSaldo(getSaldo() + monto);
     }
 
     //MÉTODOS DE TRANSACCIONABLE
@@ -96,11 +96,11 @@ public class CuentaCorriente extends Cuenta implements Consultable, Transacciona
     public void retirar(double monto) throws SaldoInsuficienteException, CuentaBloqueadaException {
         verificarBloqueada();
         if (monto <= 0) {
-            throw new SaldoInsuficienteException(getSaldo(), montoSobregiro);
+            throw new DatoInvalidoException("Retirar", monto);
         } if (monto > getLimiteRetiro()) {
-            throw new SaldoInsuficienteException(getSaldo(), montoSobregiro);
+            throw new SaldoInsuficienteException(getSaldo(), monto);
         }
-        saldo -= monto;
+        setSaldo(getSaldo() - monto);
     }
 
     @Override

@@ -1,0 +1,300 @@
+@startuml "Sistema Bancario - Diagrama de Clases"
+
+skinparam classAttributeIconSize 0
+
+package "principal" {
+    class SistemaBancarioDemo {
+        + {static} formato : DateTimeFormatter
+        + {static} main(args: String[])
+    }
+}
+
+package "modelo.interfaces" {
+    interface Consultable {
+        + obtenerResumen() : String
+        + estaActivo() : boolean
+        + obtenerTipo() : String
+    }
+    interface Transaccionable {
+        + depositar(monto: double)
+        + retirar(monto: double)
+        + calcularComision(monto: double) : double
+        + consultarSaldo() : double
+    }
+    interface Auditable {
+        + obtenerFechaCreacion() : LocalDateTime
+        + obtenerUltimaModificacion() : LocalDateTime
+        + obtenerUsuarioModificacion() : String
+        + registrarModificacion(usuario: String)
+    }
+    interface Notificable {
+        + notificar(mensaje: String)
+        + obtenerContacto() : String
+        + aceptaNotificaciones() : boolean
+    }
+}
+
+package "modelo.enums" {
+    enum EstadoTransaccion {
+        PENDIENTE
+        PROCESANDO
+        COMPLETADA
+        RECHAZADA
+        REVERTIDA
+    }
+    enum TipoCuenta {
+        CORRIENTE
+        AHORROS
+        CREDITO
+    }
+    enum Turno {
+        MAÑANA
+        TARDE
+        NOCHE
+    }
+    enum TipoDocumento {
+        CEDULA
+        PASAPORTE
+        NIT
+        CEDULA_EXTRANJERIA
+    }
+}
+
+package "modelo.excepciones" {
+    class SistemaBancarioException << (E,red) >> {
+        - codigoError : String
+        - timestamp : LocalDateTime
+    }
+    class BancoRuntimeException << (R,orange) >>
+
+    SistemaBancarioException <|-- SaldoInsuficienteException
+    SistemaBancarioException <|-- CuentaBloqueadaException
+    SistemaBancarioException <|-- ClienteNoEncontradoException
+    SistemaBancarioException <|-- CapacidadExcedidaException
+
+    BancoRuntimeException <|-- DatoInvalidoException
+    BancoRuntimeException <|-- EstadoTransaccionInvalidoException
+    BancoRuntimeException <|-- PermisoInsuficienteException
+}
+
+package "modelo.abstractas" {
+    abstract class Persona {
+        - id : String
+        - nombre : String
+        - apellido : String
+        - fechaNacimiento : LocalDate
+        - email : String
+        + {abstract} calcularEdad() : int
+        + {abstract} obtenerTipo() : String
+        + {abstract} obtenerDocumentoIdentidad() : String
+        + getNombreCompleto() : String
+    }
+
+    abstract class Empleado {
+        - legajo : String
+        - fechaContratacion : LocalDate
+        - salarioBase : double
+        - activo : boolean
+        + {abstract} calcularSalario() : double
+        + {abstract} calcularBono() : double
+        + calcularAntiguedad() : int
+    }
+
+    abstract class Cliente {
+        - {static} maxCuentas : int = 5
+        - cuentas : Cuenta[5]
+        - totalCuentas : int
+        - activo : boolean
+        - fechaCreacion : LocalDateTime
+        - ultimaModificacion : LocalDateTime
+        - usuarioModificacion : String
+        - aceptaNotificaciones : boolean
+        + agregarCuenta(cuenta: Cuenta)
+        + depositarACuenta(idCuenta: String, monto: double)
+        + buscarCuenta(idCuenta: String) : Cuenta
+    }
+
+    abstract class Cuenta {
+        - numeroCuenta : String
+        # saldo : double
+        - bloqueada : boolean
+        - fechaCreacion : LocalDateTime
+        - ultimaModificacion : LocalDateTime
+        - usuarioModificacion : String
+        - historial : Transaccion[20]
+        - totalTransacciones : int
+        + {abstract} calcularInteres() : double
+        + {abstract} getLimiteRetiro() : double
+        + {abstract} getTipoCuenta() : String
+        + verificarBloqueada()
+        + agregarAlHistorial(t: Transaccion)
+        + getHistorial() : Transaccion[20]
+    }
+
+    Persona <|-- Empleado
+    Persona <|-- Cliente
+}
+
+package "modelo.empleados" {
+    class Cajero {
+        - turno : Turno
+        - sucursalAsignada : String
+        - transaccionesDia : int
+        .. Otros Metodos Heredados ...
+    }
+    class AsesorFinanciero {
+        - fechaCreacion : LocalDateTime
+        - ultimaModificacion : LocalDateTime
+        - usuarioModificacion : String
+        - comisionBase : double
+        - metasMensuales : double
+        - clientesAsignados : Cliente[20]
+        - ventasMensuales : double
+        .. Otros Metodos Heredados ...
+    }
+    class GerenteSucursal {
+        - fechaCreacion : LocalDateTime
+        - ultimaModificacion : LocalDateTime
+        - usuarioModificacion : String
+        - sucursal : String
+        - presupuestoAnual : double
+        - empleadosACargo : Empleado[30]
+        .. Otros Metodos Heredados ...
+        + aprobarCredito(solicitante: Empleado, cuenta: CuentaCredito)
+    }
+
+    Empleado <|-- Cajero
+    Empleado <|-- AsesorFinanciero
+    Empleado <|-- GerenteSucursal
+}
+
+package "modelo.personas" {
+    class ClienteNatural {
+        - tipoDocumento : TipoDocumento
+        - numeroDocumento : String
+        .. Otros Metodos Heredados ...
+    }
+    class ClienteEmpresarial {
+        - nit : String
+        - razonSocial : String
+        - representanteLegal : String
+        .. Otros Metodos Heredados ...
+    }
+
+    Cliente <|-- ClienteNatural
+    Cliente <|-- ClienteEmpresarial
+}
+
+package "modelo.cuentas" {
+    class CuentaCorriente {
+        - montoSobregiro : double
+        - comisionMantenimiento : double
+        .. Otros Metodos Heredados ...
+    }
+    class CuentaAhorros {
+        - tasaInteres : double
+        - retirosMesActual : int
+        - maxRetirosMes : int
+        .. Otros Metodos Heredados ...
+    }
+    class CuentaCredito {
+        - limiteCredito : double
+        - tasaInteres : double
+        - deudaActual : double
+        .. Otros Metodos Heredados ...
+    }
+
+    Cuenta <|-- CuentaCorriente
+    Cuenta <|-- CuentaAhorros
+    Cuenta <|-- CuentaCredito
+}
+
+package "modelo.banco" {
+    class Banco {
+        - nombre : String
+        - empleados : Empleado[50]
+        - totalEmpleados : int
+        - clientes : Cliente[200]
+        - totalClientes : int
+        - cuentas : Cuenta[500]
+        - totalCuentas : int
+        - fechaCreacion : LocalDateTime
+        - ultimaModificacion : LocalDateTime
+        - usuarioModificacion : String
+        + registrarCliente(c: Cliente)
+        + registrarEmpleado(e: Empleado)
+        + abrirCuenta(idCliente: String, c: Cuenta)
+        + buscarCliente(id: String) : Cliente
+        + calcularNominaTotal() : double
+        + calcularInteresesMensuales()
+    }
+
+    class Transaccion {
+        - {static} formato : DateTimeFormatter
+        - id : String
+        - cuentaOrigen : Cuenta
+        - cuentaDestino : Cuenta
+        - monto : double
+        - estado : EstadoTransaccion
+        - fecha : LocalDateTime
+        - descripcion : String
+        + cambiarEstado(nuevo: EstadoTransaccion)
+        + generarComprobante() : String
+    }
+}
+
+' Relaciones de Realización (Interfaces)
+Banco ..|> Auditable : <<implements>>
+
+Cliente ..|> Consultable : <<implements>>
+Cliente ..|> Notificable : <<implements>>
+Cliente ..|> Auditable : <<implements>>
+
+Cuenta ..|> Consultable : <<implements>>
+Cuenta ..|> Transaccionable : <<implements>>
+Cuenta ..|> Auditable : <<implements>>
+
+AsesorFinanciero ..|> Consultable : <<implements>>
+AsesorFinanciero ..|> Auditable : <<implements>>
+
+GerenteSucursal ..|> Consultable : <<implements>>
+GerenteSucursal ..|> Auditable : <<implements>>
+
+' Relaciones de Asociación y Composición
+Banco *-- "0..50" Empleado
+Banco *-- "0..200" Cliente
+Banco *-- "0..500" Cuenta
+
+Cliente o-- "0..5" Cuenta
+
+Cuenta *-- "0..20" Transaccion
+
+Transaccion "1" --> "1" Cuenta : cuentaOrigen
+Transaccion "0..1" --> "1" Cuenta : cuentaDestino
+
+AsesorFinanciero --> "0..20" Cliente : clientesAsignados
+GerenteSucursal --> "0..30" Empleado : empleadosACargo
+
+' Relaciones con Enums
+Cajero --> "1" Turno
+Transaccion --> "1" EstadoTransaccion
+ClienteNatural --> "1" TipoDocumento
+Cuenta ..> TipoCuenta
+
+' Relaciones de SistemaBancarioDemo
+SistemaBancarioDemo ..> Banco
+SistemaBancarioDemo ..> ClienteNatural
+SistemaBancarioDemo ..> ClienteEmpresarial
+SistemaBancarioDemo ..> CuentaAhorros
+SistemaBancarioDemo ..> CuentaCorriente
+SistemaBancarioDemo ..> CuentaCredito
+SistemaBancarioDemo ..> Cajero
+SistemaBancarioDemo ..> AsesorFinanciero
+SistemaBancarioDemo ..> GerenteSucursal
+SistemaBancarioDemo ..> Transaccion
+SistemaBancarioDemo ..> EstadoTransaccion
+SistemaBancarioDemo ..> Turno
+SistemaBancarioDemo ..> TipoDocumento
+SistemaBancarioDemo ..> SistemaBancarioException
+
+@enduml

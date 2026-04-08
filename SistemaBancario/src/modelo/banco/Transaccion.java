@@ -110,11 +110,13 @@ public class Transaccion {
 
     public String generarComprobante() {
         StringBuilder sb = new StringBuilder();
+        
+        String destino = (cuentaDestino != null) ? cuentaDestino.getNumeroCuenta() : "N/A";
 
         sb.append("------------- COMPROBANTE ").append("-------------\n");
         sb.append("ID             : ").append(getId()).append("\n");
         sb.append("Cuenta Origen  : ").append(getCuentaOrigen().getNumeroCuenta()).append("\n");
-        sb.append("Cuenta Destino : ").append(getCuentaDestino().getNumeroCuenta()).append("\n");
+        sb.append("Cuenta Destino : ").append(destino).append("\n");
         sb.append("Fecha          : ").append(getFecha().format(formato)).append("\n");
         sb.append("Monto          : ").append(getMonto()).append("\n");
         sb.append("Descripcion    : ").append(getDescripcion()).append("\n");

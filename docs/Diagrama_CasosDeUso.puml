@@ -1,0 +1,61 @@
+@startuml "Sistema Bancario - Diagrama de Casos de Uso"
+
+left to right direction
+
+
+actor "Cajero" as Cajero
+actor "Asesor Financiero" as Asesor
+actor "Gerente de Sucursal" as Gerente
+actor "Cliente" as ClienteActor <<External>>
+actor "Sistema Auditor" as Auditor <<System>>
+
+rectangle "Sistema de Gestión Bancaria (SGB)" {
+    (Registrar Cliente) as UC1
+    (Abrir Cuenta) as UC2
+    (Procesar Depósito) as UC3
+    (Procesar Retiro) as UC4
+    
+    (Realizar Transferencia) as UC5
+    (Consultar Clientes/Cuentas) as UC6
+    (Gestionar Estados y Bloqueos) as UC7
+    
+    (Aprobar Crédito) as UC8
+    (Calcular Nómina) as UC9
+    (Registrar Empleado) as UC10
+    
+    (Recibir Notificaciones) as UC11
+    (Consultar Historial de Modificaciones) as UC12
+    
+    (Validar Saldo) as UC13
+    (Verificar Bloqueo) as UC14
+}
+
+' Relaciones Cajero
+Cajero -- UC1
+Cajero -- UC2
+Cajero -- UC3
+Cajero -- UC4
+
+' Relaciones Asesor
+Asesor -- UC5
+Asesor -- UC6
+Asesor -- UC7
+
+' Relaciones Gerente
+Gerente -- UC8
+Gerente -- UC9
+Gerente -- UC10
+
+' Relaciones Cliente y Auditor
+ClienteActor -- UC11
+Auditor -- UC12
+
+' Dependencias (Inclusiones/Extensiones)
+UC5 ..> UC3 : <<include>>
+UC5 ..> UC4 : <<include>>
+UC4 ..> UC13 : <<include>>
+UC4 ..> UC14 : <<include>>
+UC3 ..> UC14 : <<include>>
+UC8 ..> UC14 : <<include>>
+
+@enduml

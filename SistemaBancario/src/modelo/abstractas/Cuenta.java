@@ -1,3 +1,4 @@
+    
 package modelo.abstractas;
 
 import java.time.LocalDateTime;
@@ -14,7 +15,7 @@ public abstract class Cuenta implements Transaccionable, Consultable, Auditable{
     
     // ── ATRIBUTOS ───────────────────────────────────────────────────────
     private String numeroCuenta;
-    protected double saldo; // Protected para que sólo las subclases lo usen
+    private double saldo; 
     private boolean bloqueada;
     private final LocalDateTime fechaCreacion; // final porque nunca se modifica
     private LocalDateTime ultimaModificacion;
