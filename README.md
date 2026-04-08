@@ -1,6 +1,10 @@
 # Taller1P2
 Evaluación de conocimientos hasta el corte 2
-
+> **Integrantes:**
+> Benitez Moncaleano Miguel Angel
+> Mendoza Castillo Delany Yulieth
+> Ramirez Benitez Jady Luz 
+> Sanchez Villareal Carlos Arturo 
 # 🏦 Sistema de Gestión Bancaria (SGB)
 
 > **Asignatura:** Programación Orientada a Objetos
@@ -55,13 +59,41 @@ A continuación se listan **todas** las historias de usuario del sistema. Cada h
 
 | ID | Historia | Criterios de Aceptación | Prioridad | Story Points |
 |:---|:---|:---|:---:|:---:|
-| **HU-01** | Como **cajero**, quiero registrar un cliente natural con sus datos personales para aperturar una cuenta en el sistema | - El sistema valida que el documento de identidad no esté repetido. El sistema lanza `CapacidadExcedidaException` si el banco alcanzó su límite de clientes. Los datos nulos o vacíos lanzan "DatoInvalidoException". El email debe contener @ para ser válido y la fecha no debe ser futura.
+| **HU-01** | Como **cajero**, quiero registrar un cliente natural con sus datos personales para aperturar una cuenta en el sistema | - El sistema valida que el documento de identidad no esté repetido. El sistema lanza `CapacidadExcedidaException` si el banco alcanzó su límite de clientes. Los datos nulos o vacíos lanzan "DatoInvalidoException". El email debe contener @ para ser válido y la fecha no debe ser futura. | Alta | 5 | 
 |:---|:---|:---:|:---:|
-| **HU-02** | Como **cajero**, quiero registrar un cliente empresarial con su NIT y razón social para vincularlo y permitirle operar en el sistema del banco| Alta | 5 |
+| **HU-02** | Como **cajero**, quiero registrar un cliente empresarial con su NIT y razón social para vincularlo y permitirle operar en el sistema del banco|- El NIT no puede estar duplicado. Tanto la razón social y el representante legal son obligatorios; en caso de haber datos nulos, se lanzan DatoInvalidoException. El sistema lanza CapacidadExcedidaException si se supera el límite de 200 clientes |Alta | 5 |
 |:---|:---|:---:|:---:|
-| **HU-03** | Como **cajero**, quiero abrir una cuenta a un cliente existente para que pueda operar en el banco | Alta | 3 |
+| **HU-03** | Como **cajero**, quiero abrir una cuenta a un cliente existente para que pueda operar en el banco |- Al llamar al método buscarCliente() el sistema lanza "ClienteNoEncontradoException" si el id no existe.  El cliente no puede tener más de 5 cuentas (CapacidadExcedidaException). El número de cuenta debe ser único en el sistema. | Alta | 8 |
 |:---|:---|:---:|:---:|
-| **HU-04** | Como **cajero**, quiero registrar depósitos en una cuenta para aumentar el saldo del cliente | Alta | 8 |
+| **HU-04** | Como **cajero**, quiero registrar depósitos en una cuenta para aumentar el saldo del cliente | - El monto debe ser mayor a cero; si no, lanza DatoInvalidoException. Una cuenta bloqueada lanza CuentaBloqueadaException. Si el historial está lleno se lanza CapacidadExcedidaException |Alta | 5 |
+|:---|:---|:---:|:---:|
+| **HU-05** | Como **cajero**, quiero procesar retiros en una cuenta para entregar efectivo al cliente | - Se valida el saldo disponible; si es insuficiente entonces se lanza ""SaldoInsuficienteException" con saldoActual y montoSolicitado. Si Cuenta está bloqueada entonces se lanza CuentaBloqueadaException. Se aplica calcularComision() automáticamente y se registra la transacción. | Alta | 8 | 
+|:---|:---|:---:|:---:|
+| **HU-06** | Como **asesor financiero**, quiero realizar transferencias entre cuentas para mover dinero entre clientes | - Se valida el saldo en cuenta origen (SaldoInsuficienteException). Ambas cuentas deben estar activas (CuentaBloqueadaException). Se registran dos transacciones | Alta | 8 | 
+|:---|:---|:---:|:---:|
+| **HU-07** | Como **asesor financiero**, quiero cambiar el estado de una transacción para reflejar el resultado del procesamiento | - Solo se permiten transiciones válidas del enum EstadoTransaccion; cualquier otra lanza EstadoTransaccionInvalidoException. - RECHAZADA y REVERTIDA son estados finales y no admiten transición.  | Alta | 5 | 
+|:---|:---|:---:|:---:|
+| **HU-08** | Como **asesor financiero**, quiero bloquear/desbloquear cuentas para seguridad | - La cuenta bloqueada rechaza depósitos y retiros con CuentaBloqueadaException  | Alta | 5 | 
+|:---|:---|:---:|:---:|
+| **HU-09** | Como **asesor financiero**, quiero consultar el resumen de un cliente | - El método obtenerResumen() retorna los datos principales del cliente. isActivo() indica si el cliente puede operar. Si el id no existe entonces se lanza ClienteNoEncontradoException | Media | 2 | 
+|:---|:---|:---:|:---:|
+| **HU-10** | Como **gerente de sucursal**, quiero aprobar créditos para permitir financiamiento | - Solo GerenteSucursal puede aprobar créditos; cualquier otro tipo de empleado lanza "PermisoInsuficienteException" | Alta | 5 | 
+|:---|:---|:---:|:---:|
+| **HU-11** | Como **gerente de sucursal**, quiero registrar nuevos empleados para incorporarlos al sistema | - Se lanza "CapacidadExcedidaException" si se supera el límite de 50 empleados. Si los datos obligatorios están nulos o vacíos se lanzan DatoInvalidoException. El salario base debe ser mayor a cero.  | Media | 3 | 
+|:---|:---|:---:|:---:|
+| **HU-12** | Como **gerente de sucursal**, quiero obtener el cálculo total de la nómina del banco para tener un control  | - calcularNominaTotal() itera sobre empleados[] usando polimorfismo. Se retorna la suma de calcularSalario() de todos los empleados activos. | Media | 5 | 
+|:---|:---|:---:|:---:|
+| **HU-13** | Como **gerente de sucursal**, quiero calcular el salario de cada empleado considerando su antigüedad, transacciones por día y superación de la meta mensual | - el método calcularSalario() es polimórfico: cajero suma bono por transacciones, asesor suma comisión si supera meta, gerente suma bono por antigüedad y bono fijo. calcularAntigüedad() usa fechaContratacion. - Salario base inválido lanza DatoInvalidoException | Alta | 8 | 
+|:---|:---|:---:|:---:|
+| **HU-14** | Como **gerente de sucursal**, quiero asignar turno y sucursal a un cajero para la organización | - El turno debe ser un valor válido del enum Turno (MAÑANA, TARDE, NOCHE). La sucursal no puede ser nula ni vacía (DatoInvalidoException). El cajero debe estar activo en el sistema. | Baja | 2 | 
+|:---|:---|:---:|:---:|
+| **HU-15** | Como **sistema bancario**,  quiero calcular los intereses mensuales de todas las cuentas activas  | - calcularInteresesMensuales() usa polimorfismo sobre cuentas[]. CuentaAhorros: saldo * tasaInteres / 12. CuentaCredito: deudaActual * tasaInteres / 12. CuentaCorriente: cobra comisionMantenimiento fija.| Alta | 5 | 
+|:---|:---|:---:|:---:|
+| **HU-16** | Como **sistema auditor**, quiero registrar y consultar el historial de modificaciones de una entidad | - obtenerFechaCreacion() retorna la fecha en que se creó la entidad. obtenerUltimaModificacion() retorna la fecha del último cambio registrado. obtenerUsuarioModificacion() retorna el legajo del usuario que realizó el último cambio. - registrarModificacion(usuario) actualiza la fecha y el legajo del responsable cada vez que se modifica una entidad. La interfaz Auditable es implementada por las clases hijas de Cliente, las clases hijas de Cuenta, AsesorFinanciero, GerenteSucursal y Banco  | Media | 3 | 
+|:---|:---|:---:|:---:|
+| **HU-17** | Como **sistema bancario**, quiero enviar notificaciones a los clientes para informarles sobre movimientos en sus cuentas | - notificar(mensaje) imprime el mensaje al cliente. aceptaNotificaciones() determina si se envía. obtenerContacto() retorna email o teléfono válido.  | Baja | 2 | 
+|:---|:---|:---:|:---:|
+| **HU-18** | Como **cliente**, quiero que se genere un comprobante de transacción como respaldo de la operación| - El método generarComprobante() retorna texto con id, monto, fecha, estado, cuentas y descripción. - Solo se puede generar si el estado es COMPLETADA.  | Media | 5 | 
 |:---|:---|:---:|:---:|
 ---
 ---
